@@ -1,0 +1,247 @@
+/* --- BASE E CORES --- */
+html, body, #root {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #f5e9fc;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+/* --- HEADER --- */
+.header-principal {
+  background-color: #7B1FA2;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.8rem 3%;
+  position: sticky;
+  top: 0;
+  z-index: 10000; 
+  gap: 8px;
+}
+
+.caixa-logo, .caixa-login {
+  color: white;
+  font-weight: bold;
+  background-color: #4A0072;
+  padding: 0.5rem 1rem;
+  border-radius: 2rem;
+  font-size: 0.75rem;
+  text-decoration: none;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.barra-pesquisa {
+  flex-grow: 1;
+  min-width: 50px;
+  height: 2.2rem;
+  border-radius: 2rem;
+  border: none;
+  padding: 0 1rem;
+  text-align: center;
+  font-size: 0.8rem;
+}
+
+.barra-pesquisa:focus {
+  outline: 2px solid #7B1FA2;
+  background-color: white;
+}
+
+.btn-anunciar-header {
+  background-color: #ff9800;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 2rem;
+  font-weight: bold;
+  text-decoration: none;
+  font-size: 0.7rem;
+  flex-shrink: 0;
+}
+
+.acoes-header {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* --- PERFIL E DROPDOWN --- */
+.perfil-container { 
+  position: relative; 
+  display: flex;
+  align-items: center;
+}
+
+.icone-usuario-default {
+  width: 38px; 
+  height: 38px;
+  background-color: #4A0072;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid white;
+  background-image: url('https://cdn-icons-png.flaticon.com/512/149/149071.png');
+  background-size: cover;
+  background-position: center;
+  display: block; 
+  flex-shrink: 0;
+}
+
+.dropdown-logout {
+  position: absolute;
+  top: 45px; 
+  right: 0;
+  background: white;
+  padding: 12px;
+  border-radius: 12px;
+  box-shadow: 0 12px 35px rgba(0,0,0,0.4);
+  z-index: 15000; 
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px; 
+}
+
+.dropdown-logout a {
+  width: 100%;
+  display: block;
+  text-decoration: none;
+}
+
+.btn-meus-produtos {
+  width: 100%;
+  background-color: #e1f5fe;
+  color: #01579b;
+  border: 1px solid #01579b;
+  padding: 10px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: 0.2s;
+}
+
+.btn-meus-produtos:hover {
+  background-color: #b3e5fc;
+}
+.btn-carrinho-dropdown {
+  width: 100%;
+  background-color: #f3e5f5;
+  color: #7B1FA2;
+  border: 1px solid #7B1FA2;
+  padding: 10px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: 0.2s;
+}
+
+.btn-carrinho-dropdown:hover {
+  background-color: #e1bee7;
+}
+.btn-sair-menu {
+  width: 100%;
+  background-color: #fff0f0;
+  color: #f44336;
+  border: 1px solid #ffcccc;
+  padding: 10px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-sair-menu:hover {
+  background-color: #ffebee;
+}
+
+/* --- MODAL E TOASTS --- */
+.janela-modal {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 20000; 
+  padding: 20px;
+}
+
+.conteudo-modal {
+  background-color: white;
+  padding: 2.5rem 2rem;
+  border-radius: 1.5rem;
+  width: 100%;
+  max-width: 380px;
+  position: relative;
+  text-align: center;
+}
+
+.fechar {
+  position: absolute;
+  top: 15px; right: 15px;
+  background: #eee;
+  border: none;
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.form-login {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 1.5rem 0;
+}
+
+.form-login input {
+  padding: 0.9rem;
+  border: 1px solid #ddd;
+  border-radius: 0.7rem;
+  width: 100%;
+  background-color: #f9f9f9;
+}
+
+.btn-enviar {
+  background-color: #7B1FA2;
+  color: white;
+  padding: 0.9rem;
+  border: none;
+  border-radius: 0.7rem;
+  font-weight: bold;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 5px;
+}
+
+.toast-aviso {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  padding: 12px 25px;
+  border-radius: 10px;
+  color: white;
+  font-weight: bold;
+  z-index: 30000;
+  animation: slideIn 0.3s ease-out;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.toast-aviso.sucesso { background-color: #4CAF50; }
+.toast-aviso.erro { background-color: #f44336; }
+
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}

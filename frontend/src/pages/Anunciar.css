@@ -1,0 +1,153 @@
+.tela-enviar-produto {
+  max-width: 500px;
+  margin: 20px auto;
+  background: white;
+  padding: 2rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.form-anuncio input, .form-anuncio textarea {
+  width: 100%;
+  padding: 0.9rem;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 0.7rem;
+}
+
+.btn-finalizar {
+  background-color: #7B1FA2;
+  color: white;
+  padding: 1rem;
+  border: none;
+  border-radius: 0.7rem;
+  font-weight: bold;
+  width: 100%;
+  cursor: pointer;
+}
+.upload-container {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.label-foto {
+  width: 150px;
+  height: 150px;
+  border: 2px dashed #7B1FA2;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+  color: #7B1FA2;
+  font-weight: bold;
+}
+
+.preview-foto {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.preview-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+  width: 100%;
+  padding: 5px;
+}
+
+.preview-foto-mini {
+  width: 100%;
+  height: 45px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.add-mais {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f0f0f0;
+  color: #7B1FA2;
+  font-size: 1.5rem;
+  border-radius: 4px;
+  height: 45px;
+}
+.input-select {
+  padding: 0.9rem;
+  border: 1px solid #ddd;
+  border-radius: 0.7rem;
+  width: 100%;
+  background-color: #f9f9f9;
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.input-select:focus {
+  outline: none;
+  border-color: #7B1FA2;
+}
+.container-foto-preview {
+  position: relative;
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+}
+
+.btn-remover-foto-preview {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  transition: transform 0.2s ease;
+  z-index: 5;
+}
+
+.btn-remover-foto-preview:hover {
+  background-color: #ff0000;
+  transform: scale(1.1);
+}
+
+.preview-foto-mini {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+.add-mais {
+  width: 80px;
+  height: 80px;
+  border: 2px dashed #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: #888;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.add-mais:hover {
+  background-color: #f0f0f0;
+  border-color: #999;
+}
