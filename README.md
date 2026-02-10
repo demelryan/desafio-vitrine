@@ -16,6 +16,13 @@ Este projeto é uma plataforma completa de vitrine, onde usuários podem se cada
  * Controle de Propriedade (Owner-Only): * No Frontend, o botão "Tenho Interesse" é substituído por "Editar Meu Anúncio" se o usuário logado for o dono.
    * No Backend, permissões de classe e sobrescrita de métodos garantem que apenas o criador possa modificar seus itens.
  * Gestão de Mídia: Upload seguro de imagens via MultiPartParser, com suporte a imagem principal e galeria adicional.
+
+​⚙️ Gerenciamento (Django Admin)
+
+​O projeto possui a interface administrativa do Django habilitada para gestão de produtos, usuários e logs de sistema.
+​URL: http://127.0.0.1:8000/admin/
+​Usuário: admin
+​Senha: 54321
  
 🚀 Como Executar o Projeto
 
