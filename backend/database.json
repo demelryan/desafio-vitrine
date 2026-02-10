@@ -64,7 +64,7 @@
     {
       "id": 1770672455029,
       "nome": "Rolex Submariner ",
-      "preco": 49999,
+      "preco": 49999.76,
       "cidade": "Maranguape",
       "categoria": "Roupas",
       "descricao": "Relógio Rolex dourado",
@@ -77,12 +77,5 @@
       "vendedorId": 1770615578939
     }
   ],
-  "carrinho": [
-    {
-      "id": 1770672377068,
-      "produtoId": 1770672304855,
-      "quantidade": 3,
-      "usuarioId": 1770615578939
-    }
-  ]
+  "carrinho": []
 }

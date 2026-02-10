@@ -1,11 +1,9 @@
-/* --- CONTAINER PRINCIPAL --- */
 .container-carrinho { 
   padding: 20px; 
   max-width: 600px; 
   margin: 0 auto; 
 }
 
-/* --- ESTADO VAZIO --- */
 .carrinho-vazio {
   text-align: center;
   padding: 100px 20px;
@@ -25,7 +23,6 @@
 
 .btn-voltar-compras:hover { background-color: #4A0072; }
 
-/* --- HEADER DO CARRINHO --- */
 .carrinho-header-topo {
   display: flex;
   justify-content: space-between;
@@ -45,7 +42,6 @@
   transition: 0.2s;
 }
 
-/* --- LISTA DE ITENS --- */
 .item-carrinho { 
   display: flex; 
   align-items: center; 
@@ -140,7 +136,6 @@
   cursor: pointer;
   margin-top: 10px;
 }
-/* --- OVERLAY E MODAL --- */
 .modal-overlay {
   position: fixed;
   top: 0; left: 0; width: 100%; height: 100%;
