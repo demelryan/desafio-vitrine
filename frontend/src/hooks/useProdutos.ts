@@ -20,12 +20,9 @@ export function useProdutos() {
   const adicionarAnuncio = async (novo: FormData) => {
     try {
       const token = localStorage.getItem('token');
-      
       const res = await fetch(API_URL, {
         method: 'POST',
-        headers: { 
-          'Authorization': `Bearer ${token}` 
-        },
+        headers: { 'Authorization': `Bearer ${token}` },
         body: novo
       });
 
@@ -33,11 +30,8 @@ export function useProdutos() {
         const anuncioSalvo = await res.json();
         setAnuncios(prev => [anuncioSalvo, ...prev]);
         return true; 
-      } else {
-        const erroLog = await res.json();
-        console.error("O Django recusou o anúncio:", erroLog);
-        throw new Error("Erro de validação no servidor");
       }
+      return false;
     } catch (err) {
       console.error("Erro ao enviar anúncio:", err);
       throw err; 
@@ -46,20 +40,36 @@ export function useProdutos() {
 
   const editarAnuncioNoServidor = async (id: any, dadosEditados: any) => {
     try {
-      const res = await fetch(`${API_URL}${id}/`, {
+      const token = localStorage.getItem('token');
+      const éFormData = dadosEditados instanceof FormData;
+      
+      const urlFinal = `${API_URL}${id}/`; 
+
+      const headers: any = { 
+        'Authorization': `Bearer ${token}` 
+      };
+
+      if (!éFormData) {
+        headers['Content-Type'] = 'application/json';
+      }
+
+      const res = await fetch(urlFinal, {
         method: 'PATCH', 
-        headers: { 
-          'Content-Type': 'application/json', 
-          'Authorization': `Bearer ${localStorage.getItem('token')}` 
-        },
-        body: JSON.stringify(dadosEditados)
+        headers: headers,
+        body: éFormData ? dadosEditados : JSON.stringify(dadosEditados)
       });
+
       if (res.ok) {
         const data = await res.json();
         setAnuncios(prev => prev.map(a => String(a.id) === String(id) ? { ...a, ...data } : a));
         return true; 
+      } else {
+        const erroMsg = await res.text();
+        console.error("O Django recusou a edição:", erroMsg);
       }
-    } catch (err) { console.error("Erro ao editar no Django:", err); }
+    } catch (err) { 
+      console.error("Erro de conexão com o servidor:", err); 
+    }
     return false;
   };
 
@@ -68,9 +78,7 @@ export function useProdutos() {
     try {
       await fetch(`${API_URL}${id}/`, { 
         method: 'DELETE', 
-        headers: { 
-            'Authorization': `Bearer ${localStorage.getItem('token')}` 
-        } 
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } 
       });
     } catch (err) { console.error("Erro ao excluir no Django:", err); }
   };

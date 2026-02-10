@@ -4,6 +4,20 @@ from django.contrib.auth.models import User
 from .models import Produto, CarrinhoItem, ProdutoImagem 
 from .serializers import ProdutoSerializer, CarrinhoItemSerializer, UserSerializer
 
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        data['user_id'] = self.user.id
+        data['username'] = self.user.username
+        data['first_name'] = self.user.first_name
+        return data
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
+
 class RegistrarUsuarioView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -23,6 +37,14 @@ class ProdutoViewSet(viewsets.ModelViewSet):
             vendedor=self.request.user, 
             vendedor_nome=nome_exibicao
         )
+        
+        imagens_extras = self.request.FILES.getlist('imagens_adicionais')
+        for img in imagens_extras:
+            ProdutoImagem.objects.create(produto=produto, imagem=img)
+
+    def perform_update(self, serializer):
+        produto = serializer.save()
+        
         imagens_extras = self.request.FILES.getlist('imagens_adicionais')
         
         for img in imagens_extras:

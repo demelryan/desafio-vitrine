@@ -26,24 +26,24 @@ class ProdutoImagemSerializer(serializers.ModelSerializer):
 class ProdutoSerializer(serializers.ModelSerializer):
     vendedor = serializers.ReadOnlyField(source='vendedor.id')
     vendedor_nome = serializers.ReadOnlyField()
-    imagem_url = serializers.ImageField(required=False, allow_null=True, use_url=True)
     
+    imagem_url = serializers.SerializerMethodField()
     imagens = ProdutoImagemSerializer(many=True, read_only=True)
 
     class Meta:
         model = Produto
         fields = [
-            'id', 
-            'nome', 
-            'preco', 
-            'descricao', 
-            'imagem_url', 
-            'categoria', 
-            'cidade', 
-            'vendedor', 
-            'vendedor_nome',
-            'imagens'
+            'id', 'nome', 'preco', 'descricao', 'imagem_url', 
+            'categoria', 'cidade', 'vendedor', 'vendedor_nome', 'imagens'
         ]
+
+    def get_imagem_url(self, obj):
+        if obj.imagem_url:
+            request = self.context.get('request')
+            if request:
+                return request.build_absolute_uri(obj.imagem_url.url)
+            return obj.imagem_url.url
+        return None
 
 class CarrinhoItemSerializer(serializers.ModelSerializer):
     produto_detalhes = ProdutoSerializer(source='produto', read_only=True)

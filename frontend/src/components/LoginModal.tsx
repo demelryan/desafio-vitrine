@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 interface LoginModalProps {
   setModalAberto: (aberto: boolean) => void;
-  onLoginSuccess: (nome: string) => void;
+  onLoginSuccess: (user: any) => void;
   mostrarAviso: (msg: string, tipo: 'sucesso' | 'erro') => void;
 }
 
@@ -35,18 +35,27 @@ export function LoginModal({ setModalAberto, onLoginSuccess, mostrarAviso }: Log
         if (modoLogin) {
           localStorage.setItem('token', data.access);
           localStorage.setItem('refresh', data.refresh);
-          localStorage.setItem('usuario', username);
           
-          onLoginSuccess(username);
+          const usuarioParaSalvar = {
+            id: data.user_id, 
+            username: data.username || username,
+            first_name: data.first_name || username
+          };
+
+          localStorage.setItem('usuario', JSON.stringify(usuarioParaSalvar));
+          
+          onLoginSuccess(usuarioParaSalvar);
+          
           setModalAberto(false);
-          mostrarAviso(`Bem-vindo, ${username}!`, 'sucesso');
+          mostrarAviso(`Bem-vindo, ${usuarioParaSalvar.first_name}!`, 'sucesso');
         } else {
           mostrarAviso("Conta criada com sucesso! Faça login.", 'sucesso');
           setModoLogin(true);
           setSenha('');
         }
       } else {
-        mostrarAviso("Usuário ou senha incorretos", 'erro');
+        const erroMsg = data.detail || "Usuário ou senha incorretos";
+        mostrarAviso(erroMsg, 'erro');
       }
     } catch (err) {
       mostrarAviso("Erro ao conectar com o servidor Django.", "erro");
@@ -62,7 +71,7 @@ export function LoginModal({ setModalAberto, onLoginSuccess, mostrarAviso }: Log
         <form className="form-login" onSubmit={realizarLogin}>
           {!modoLogin && (
             <input 
-              placeholder="Nome Exibição" 
+              placeholder="Nome de Exibição" 
               value={nomeUsuario} 
               onChange={e => setNomeUsuario(e.target.value)} 
               required 
@@ -70,7 +79,7 @@ export function LoginModal({ setModalAberto, onLoginSuccess, mostrarAviso }: Log
           )}
           <input 
             type="text" 
-            placeholder="Nome de Usuário" 
+            placeholder="Usuário" 
             value={username} 
             onChange={e => setUsername(e.target.value)} 
             required 
@@ -87,7 +96,11 @@ export function LoginModal({ setModalAberto, onLoginSuccess, mostrarAviso }: Log
           </button>
         </form>
 
-        <p onClick={() => { setModoLogin(!modoLogin); setSenha(''); }} className="troca-modo" style={{ marginTop: '15px', cursor: 'pointer', color: '#007bff' }}>
+        <p 
+          onClick={() => { setModoLogin(!modoLogin); setSenha(''); }} 
+          className="troca-modo" 
+          style={{ marginTop: '15px', cursor: 'pointer', color: '#4A0072', fontWeight: 'bold' }}
+        >
           {modoLogin ? 'Não tem conta? Cadastre-se' : 'Já tem uma conta? Entre aqui'}
         </p>
       </div>

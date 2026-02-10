@@ -23,7 +23,6 @@ export function Anunciar({ adicionarAnuncio, mostrarAviso }: AnunciarProps) {
 
   const handleImagem = (e: React.ChangeEvent<HTMLInputElement>) => {
     const arquivos = Array.from(e.target.files || []);
-    
     setArquivosReais(prev => [...prev, ...arquivos]);
 
     arquivos.forEach(arquivo => {
@@ -59,27 +58,26 @@ export function Anunciar({ adicionarAnuncio, mostrarAviso }: AnunciarProps) {
     formData.append('nome', nome);
     formData.append('preco', isNaN(precoNumerico) ? "0" : precoNumerico.toString());
     formData.append('descricao', desc);
-    formData.append('cidade', cidade);
+    formData.append('cidade', cidade); // Corrigido para 'cidade'
     formData.append('categoria', categoria);
 
     if (arquivosReais.length > 0) {
-  formData.append('imagem_url', arquivosReais[0]);
+      // Primeira imagem como principal para o campo imagem_url do Django
+      formData.append('imagem_url', arquivosReais[0]);
+
+      // Envia todas as fotos para a galeria (conforme configurado na View)
+      arquivosReais.forEach((arquivo) => {
+        formData.append('imagens_adicionais', arquivo);
+      });
     }
 
     try {
       await adicionarAnuncio(formData);
       mostrarAviso("Anúncio publicado com sucesso!", "sucesso");
-      
-      setTimeout(() => {
-        navigate('/');
-      }, 1000); 
+      setTimeout(() => navigate('/'), 1000); 
     } catch (err: any) {
-      console.error("Erro ao enviar:", err);
-      const mensagemErro = err.response?.status === 401 
-        ? "Sessão expirada. Faça login novamente." 
-        : "Erro ao publicar. Verifique os campos e tente novamente.";
-        
-      mostrarAviso(mensagemErro, "erro");
+      console.error("Erro detalhado do servidor:", err.response?.data);
+      mostrarAviso("Erro ao publicar. Verifique os campos.", "erro");
       setEnviando(false);
     }
   };
@@ -99,24 +97,6 @@ export function Anunciar({ adicionarAnuncio, mostrarAviso }: AnunciarProps) {
                     type="button" 
                     className="btn-remover-foto-preview"
                     onClick={() => removerImagem(index)}
-                    style={{
-                      position: 'absolute',
-                      top: '-5px',
-                      right: '-5px',
-                      background: 'red',
-                      color: 'white',
-                      border: 'none',
-                      borderRadius: '50%',
-                      width: '22px',
-                      height: '22px',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: '14px',
-                      fontWeight: 'bold',
-                      zIndex: 10
-                    }}
                   >
                     ×
                   </button>
@@ -141,41 +121,11 @@ export function Anunciar({ adicionarAnuncio, mostrarAviso }: AnunciarProps) {
           />
         </div>
 
-        <input 
-          placeholder="Nome do Produto" 
-          value={nome} 
-          onChange={e => setNome(e.target.value)} 
-          required 
-          disabled={enviando} 
-        />
-        
-        <input 
-          placeholder="Preço (Ex: 150,00)" 
-          type="text" 
-          value={preco} 
-          onChange={e => {
-            const valorDigitado = e.target.value.replace(/[^0-9.,]/g, '');
-            setPreco(valorDigitado);
-          }} 
-          required 
-          disabled={enviando} 
-        />
+        <input placeholder="Nome do Produto" value={nome} onChange={e => setNome(e.target.value)} required disabled={enviando} />
+        <input placeholder="Preço (Ex: 150,00)" type="text" value={preco} onChange={e => setPreco(e.target.value.replace(/[^0-9.,]/g, ''))} required disabled={enviando} />
+        <input placeholder="Sua Cidade" value={cidade} onChange={e => setCidade(e.target.value)} required disabled={enviando} />
 
-        <input 
-          placeholder="Sua Cidade" 
-          value={cidade} 
-          onChange={e => setCidade(e.target.value)} 
-          required 
-          disabled={enviando} 
-        />
-
-        <select 
-          value={categoria} 
-          onChange={e => setCategoria(e.target.value)} 
-          required 
-          className="input-select"
-          disabled={enviando}
-        >
+        <select value={categoria} onChange={e => setCategoria(e.target.value)} required className="input-select" disabled={enviando}>
           <option value="">Selecione uma Categoria</option>
           <option value="Eletrônicos">Eletrônicos</option>
           <option value="Roupas">Roupas</option>
@@ -184,26 +134,9 @@ export function Anunciar({ adicionarAnuncio, mostrarAviso }: AnunciarProps) {
           <option value="Outros">Outros</option>
         </select>
 
-        <textarea 
-          placeholder="Descrição detalhada..." 
-          value={desc} 
-          onChange={e => setDesc(e.target.value)} 
-          rows={4} 
-          disabled={enviando} 
-        />
+        <textarea placeholder="Descrição detalhada..." value={desc} onChange={e => setDesc(e.target.value)} rows={4} disabled={enviando} />
         
-        <button 
-          type="submit" 
-          className="btn-finalizar" 
-          disabled={enviando} 
-          style={{ 
-            opacity: enviando ? 0.5 : 1, 
-            cursor: enviando ? 'not-allowed' : 'pointer',
-            backgroundColor: '#28a745',
-            color: 'white',
-            fontWeight: 'bold'
-          }}
-        >
+        <button type="submit" className="btn-finalizar" disabled={enviando}>
           {enviando ? "Publicando..." : "Publicar Anúncio"}
         </button>
       </form>

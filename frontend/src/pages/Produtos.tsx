@@ -35,10 +35,25 @@ export function Produtos({ anuncios, adicionarAoCarrinho, abrirModal }: Produtos
   const BASE_URL = 'http://127.0.0.1:8000';
 
   const produto = anuncios.find(p => String(p.id) === String(id));
-  const usuarioRaw = localStorage.getItem('usuario');
-  const usuarioLogado = usuarioRaw ? usuarioRaw.replace(/"/g, '') : null;
   
-  const ehDonoDoProduto = usuarioLogado === produto?.vendedor_nome;
+  const obterUsuarioLogado = () => {
+    try {
+      const usuarioRaw = localStorage.getItem('usuario');
+      if (!usuarioRaw) return null;
+      return JSON.parse(usuarioRaw);
+    } catch (e) {
+      return null;
+    }
+  };
+
+  const usuarioLogado = obterUsuarioLogado();
+
+  const ehDonoDoProduto = Boolean(
+    usuarioLogado && 
+    usuarioLogado.id && 
+    produto && 
+    String(produto.vendedor) === String(usuarioLogado.id)
+  );
 
   if (!produto) {
     return (
@@ -54,10 +69,12 @@ export function Produtos({ anuncios, adicionarAoCarrinho, abrirModal }: Produtos
       navigate(`/editar/${produto.id}`);
       return;
     }
+    
     if (!usuarioLogado) {
       abrirModal(true);
       return;
     }
+
     adicionarAoCarrinho(produto);
   };
 
@@ -71,17 +88,14 @@ export function Produtos({ anuncios, adicionarAoCarrinho, abrirModal }: Produtos
   };
 
   const listaImagens: string[] = [];
-  
   if (produto.imagem_url || produto.imagem) {
     listaImagens.push(tratarUrl(produto.imagem_url || produto.imagem || ""));
   }
-
   if (produto.imagens && produto.imagens.length > 0) {
     produto.imagens.forEach(imgObj => {
       listaImagens.push(tratarUrl(imgObj.imagem));
     });
   }
-
   if (listaImagens.length === 0) listaImagens.push('https://via.placeholder.com/400');
 
   return (
@@ -118,7 +132,6 @@ export function Produtos({ anuncios, adicionarAoCarrinho, abrirModal }: Produtos
               </button>
             )}
             
-            {/* MINIATURAS INDICADORAS */}
             <div className="indicadores-fotos">
                 {listaImagens.map((_, i) => (
                     <div 
@@ -144,12 +157,6 @@ export function Produtos({ anuncios, adicionarAoCarrinho, abrirModal }: Produtos
           <h1 className="titulo-produto">{produto.nome}</h1>
           <h2 className="preco-grande">{formatarMoeda(produto.preco)}</h2>
           
-          {produto.cidade && (
-            <p style={{ fontSize: '0.9rem', color: '#666', marginBottom: '15px' }}>
-              📍 Localização: {produto.cidade}
-            </p>
-          )}
-          
           <div className="caixa-descricao">
             <h4>Descrição:</h4>
             <p>{produto.descricao || "Sem descrição disponível."}</p>
@@ -159,7 +166,7 @@ export function Produtos({ anuncios, adicionarAoCarrinho, abrirModal }: Produtos
             className="btn-comprar-detalhes" 
             onClick={handleBotaoPrincipal}
             style={{ 
-              backgroundColor: ehDonoDoProduto ? '#007BFF' : '', 
+              backgroundColor: ehDonoDoProduto ? '#4A0072' : '#007BFF', 
               color: 'white',
               cursor: 'pointer',
               border: 'none',
@@ -170,7 +177,8 @@ export function Produtos({ anuncios, adicionarAoCarrinho, abrirModal }: Produtos
               marginTop: '20px'
             }}
           >
-            {ehDonoDoProduto ? "✏️ Editar meu Anúncio" : "Tenho Interesse"}
+            {/* TEXTO DINÂMICO AQUI */}
+            {ehDonoDoProduto ? 'Editar Meu Anúncio' : 'Tenho Interesse'}
           </button>
         </div>
       </div>

@@ -9,7 +9,10 @@ export function Carrinho({ itens, esvaziar, mostrarAviso, removerItem, alterarQu
   const [info, setInfo] = useState({ nome: '', tel: '', endereco: '' });
   const [modalLimpeza, setModalLimpeza] = useState(false);
 
-  const total = itens.reduce((acc: number, item: any) => acc + (Number(item.preco) * (item.quantidade || 1)), 0);
+  const total = itens.reduce((acc: number, item: any) => {
+    const preco = Number(item.produto_detalhes?.preco) || 0;
+    return acc + (preco * (item.quantidade || 1));
+  }, 0);
 
   const handleLimparReal = () => {
     esvaziar();
@@ -19,7 +22,7 @@ export function Carrinho({ itens, esvaziar, mostrarAviso, removerItem, alterarQu
 
   const finalizar = (e: React.FormEvent) => {
     e.preventDefault();
-    mostrarAviso("Compra realizada!", "sucesso");
+    mostrarAviso("Compra realizada com sucesso!", "sucesso");
     esvaziar();
     navigate('/');
   };
@@ -60,15 +63,28 @@ export function Carrinho({ itens, esvaziar, mostrarAviso, removerItem, alterarQu
           <div className="lista-carrinho">
             {itens.map((item: any) => (
               <div key={item.id} className="item-carrinho">
-                <img src={item.imagens ? item.imagens[0] : item.imagem} alt={item.nome} />
+                <img 
+                  src={item.produto_detalhes?.imagem_url || item.produto_detalhes?.imagens?.[0]?.imagem} 
+                  alt={item.produto_detalhes?.nome} 
+                />
                 <div className="item-info">
-                  <h4>{item.nome}</h4>
-                 <p>{formatarMoeda(item.preco)}</p>
+                  <h4>{item.produto_detalhes?.nome}</h4>
+                  <p>{formatarMoeda(item.produto_detalhes?.preco)}</p>
                   <div className="controles-quantidade">
-                    <button className="btn-qtd" onClick={() => alterarQuantidade(item.id, (item.quantidade || 1) - 1)} disabled={item.quantidade <= 1}> - </button>
+                    <button 
+                      className="btn-qtd" 
+                      onClick={() => alterarQuantidade(item.id, (item.quantidade || 1) - 1)} 
+                      disabled={item.quantidade <= 1}
+                    > - </button>
                     <span className="qtd-numero">{item.quantidade || 1}</span>
-                    <button className="btn-qtd" onClick={() => alterarQuantidade(item.id, (item.quantidade || 1) + 1)}> + </button>
-                    <button className="btn-remover-item" onClick={() => { removerItem(item.id); mostrarAviso("Item removido", "sucesso"); }}>Remover</button>
+                    <button 
+                      className="btn-qtd" 
+                      onClick={() => alterarQuantidade(item.id, (item.quantidade || 1) + 1)}
+                    > + </button>
+                    <button 
+                      className="btn-remover-item" 
+                      onClick={() => { removerItem(item.id); mostrarAviso("Item removido", "sucesso"); }}
+                    >Remover</button>
                   </div>
                 </div>
               </div>
@@ -82,10 +98,23 @@ export function Carrinho({ itens, esvaziar, mostrarAviso, removerItem, alterarQu
         </>
       ) : (
         <form className="form-anuncio" onSubmit={finalizar}>
-          <h2>Onde entregamos?</h2>
-          <input placeholder="Seu nome" required onChange={e => setInfo({...info, nome: e.target.value})} />
-          <input placeholder="WhatsApp" type="tel" required onChange={e => setInfo({...info, tel: e.target.value})} />
-          <textarea placeholder="Endereço completo" required onChange={e => setInfo({...info, endereco: e.target.value})} />
+          <h2>Informações de Entrega</h2>
+          <input 
+            placeholder="Seu nome" 
+            required 
+            onChange={e => setInfo({...info, nome: e.target.value})} 
+          />
+          <input 
+            placeholder="Telefone de contato" 
+            type="tel" 
+            required 
+            onChange={e => setInfo({...info, tel: e.target.value})} 
+          />
+          <textarea 
+            placeholder="Endereço completo" 
+            required 
+            onChange={e => setInfo({...info, endereco: e.target.value})} 
+          />
           <button type="submit" className="btn-finalizar">Confirmar Compra</button>
           <button type="button" className="btn-sair" onClick={() => setEtapa(1)}>Voltar</button>
         </form>

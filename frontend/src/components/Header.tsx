@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 interface HeaderProps {
-  usuario: string | null;
+  usuario: any; 
   carrinhoCount: number;
   setModalAberto: (aberto: boolean) => void;
   fazerLogout: () => void;
@@ -25,9 +25,14 @@ export function Header({
     }
   };
 
-  const formatarNome = (nome: string | null) => {
-    if (!nome) return '';
-    const nomeLimpo = nome.replace(/^"(.*)"$/, '$1');
+  const exibirNome = () => {
+    if (!usuario) return '';
+    
+    if (typeof usuario === 'object') {
+      return usuario.first_name || usuario.username || 'Usuário';
+    }
+
+    const nomeLimpo = String(usuario).replace(/^"(.*)"$/, '$1');
     return nomeLimpo.split(' ')[0]; 
   };
 
@@ -56,7 +61,8 @@ export function Header({
               
               {menuAberto && (
                 <div className="dropdown-logout">
-                  <p>Olá, <strong>{formatarNome(usuario)}</strong></p>
+                  {/* Mudamos aqui para usar a nova função exibirNome */}
+                  <p>Olá, <strong>{exibirNome()}</strong></p>
                   
                   <Link to="/meus-produtos" className="link-dropdown" onClick={() => setMenuAberto(false)}>
                     <button className="btn-meus-produtos">

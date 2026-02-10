@@ -3,24 +3,26 @@ import { useState, useEffect } from 'react';
 const API_CARRINHO = 'http://127.0.0.1:8000/api/carrinho/';
 
 export function useCarrinho(usuario: string | null) {
-  const [carrinho, setCarrinho] = useState<any[]>([]);
+  const [itens, setItens] = useState<any[]>([]);
   const token = localStorage.getItem('token');
   
   const limpo = (n: string | null) => n ? n.replace(/^"(.*)"$/, '$1') : '';
 
-  useEffect(() => {
+  const carregarDados = () => {
     if (usuario && token) {
       fetch(API_CARRINHO, {
-        headers: { 
-          'Authorization': `Bearer ${limpo(token)}` 
-        }
+        headers: { 'Authorization': `Bearer ${limpo(token)}` }
       })
       .then(r => r.json())
-      .then(data => setCarrinho(Array.isArray(data) ? data : []))
-      .catch(() => setCarrinho([]));
+      .then(data => setItens(Array.isArray(data) ? data : []))
+      .catch(() => setItens([]));
     } else {
-      setCarrinho([]);
+      setItens([]);
     }
+  };
+
+  useEffect(() => {
+    carregarDados();
   }, [usuario, token]);
 
   const adicionarItem = (produto: any) => {
@@ -37,13 +39,8 @@ export function useCarrinho(usuario: string | null) {
         quantidade: 1 
       })
     })
-    .then(r => r.json())
-    .then(itemSalvo => {
-      fetch(API_CARRINHO, {
-        headers: { 'Authorization': `Bearer ${limpo(token)}` }
-      })
-      .then(r => r.json())
-      .then(data => setCarrinho(data));
+    .then(r => {
+      if (r.ok) carregarDados();
     });
   };
 
@@ -59,7 +56,7 @@ export function useCarrinho(usuario: string | null) {
       body: JSON.stringify({ quantidade: novaQtd })
     })
     .then(() => {
-        setCarrinho(prev => prev.map(i => i.id === id ? { ...i, quantidade: novaQtd } : i));
+        setItens(prev => prev.map(i => i.id === id ? { ...i, quantidade: novaQtd } : i));
     });
   };
 
@@ -70,9 +67,28 @@ export function useCarrinho(usuario: string | null) {
       headers: { 'Authorization': `Bearer ${limpo(token)}` }
     })
     .then(() => {
-        setCarrinho(prev => prev.filter(i => i.id !== id));
+        setItens(prev => prev.filter(i => i.id !== id));
     });
   };
 
-  return { carrinho, adicionarItem, alterarQuantidade, removerItem };
+  const esvaziar = async () => {
+    if (!token || itens.length === 0) return;
+
+    try {
+      const deletarPromessas = itens.map(item => 
+        fetch(`${API_CARRINHO}${item.id}/`, {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${limpo(token)}` }
+        })
+      );
+
+      await Promise.all(deletarPromessas);
+      
+      setItens([]);
+    } catch (err) {
+      console.error("Erro ao esvaziar carrinho no servidor:", err);
+    }
+  };
+
+  return { itens, adicionarItem, alterarQuantidade, removerItem, esvaziar };
 }
