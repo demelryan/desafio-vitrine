@@ -1,0 +1,179 @@
+/* --- CONTAINER PRINCIPAL --- */
+.container-carrinho { 
+  padding: 20px; 
+  max-width: 600px; 
+  margin: 0 auto; 
+}
+
+/* --- ESTADO VAZIO --- */
+.carrinho-vazio {
+  text-align: center;
+  padding: 100px 20px;
+}
+
+.btn-voltar-compras {
+  background-color: #7B1FA2;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: 0.2s;
+}
+
+.btn-voltar-compras:hover { background-color: #4A0072; }
+
+/* --- HEADER DO CARRINHO --- */
+.carrinho-header-topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.btn-limpar-texto {
+  background: #ffebee;
+  color: #c62828;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: 0.2s;
+}
+
+/* --- LISTA DE ITENS --- */
+.item-carrinho { 
+  display: flex; 
+  align-items: center; 
+  gap: 15px; 
+  background: white; 
+  padding: 10px; 
+  border-radius: 12px; 
+  margin-bottom: 10px; 
+  border: 1px solid #eee;
+}
+
+.item-carrinho img { 
+  width: 70px; 
+  height: 70px; 
+  border-radius: 8px; 
+  object-fit: cover; 
+}
+
+.item-info { flex: 1; }
+.item-info h4 { margin: 0; color: #333; }
+.item-info p { margin: 5px 0 0; color: #7B1FA2; font-weight: bold; font-size: 0.9rem; }
+
+.controles-quantidade {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.btn-qtd {
+  background: #f3e5f5;
+  color: #7B1FA2;
+  border: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-qtd:disabled { opacity: 0.3; cursor: not-allowed; }
+
+.qtd-numero { font-weight: bold; color: #333; min-width: 15px; text-align: center; }
+
+.btn-remover-item {
+  background: none;
+  border: none;
+  color: #c62828;
+  font-size: 0.75rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-left: auto; 
+  text-decoration: underline;
+}
+
+.subtotal-item {
+  font-size: 0.8rem;
+  color: #666;
+  margin-top: 5px;
+}
+
+.resumo-carrinho { 
+  margin-top: 20px; 
+  padding: 20px; 
+  background: #f3e5f5; 
+  border-radius: 15px; 
+  text-align: right; 
+}
+
+.resumo-carrinho h3 { color: #7B1FA2; margin-bottom: 15px; }
+
+.btn-finalizar {
+  width: 100%; 
+  background: #7B1FA2; 
+  color: white; 
+  border: none; 
+  padding: 15px; 
+  border-radius: 10px; 
+  font-weight: bold; 
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-sair {
+  width: 100%; 
+  background: #f5f5f5; 
+  color: #666; 
+  border: 1px solid #ddd; 
+  padding: 12px; 
+  border-radius: 10px; 
+  font-weight: bold; 
+  cursor: pointer;
+  margin-top: 10px;
+}
+/* --- OVERLAY E MODAL --- */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(5px);
+  display: flex; justify-content: center; align-items: center;
+  z-index: 1000;
+}
+
+.modal-confirmacao {
+  background: white;
+  padding: 25px;
+  border-radius: 20px;
+  text-align: center;
+  width: 85%;
+  max-width: 320px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  animation: modalEntrada 0.3s ease-out;
+}
+
+@keyframes modalEntrada {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.modal-botoes { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+
+.btn-confirmar-limpeza {
+  background: #c62828; color: white; border: none;
+  padding: 12px; border-radius: 10px; font-weight: bold; cursor: pointer;
+}
+
+.btn-cancelar-limpeza {
+  background: #f5f5f5; color: #333; border: none;
+  padding: 12px; border-radius: 10px; font-weight: bold; cursor: pointer;
+}
