@@ -78,7 +78,7 @@ app.post('/login', async (req, res) => {
   const usuario = db.usuarios.find(u => u.email === email);
 
   if (!usuario || !(await bcrypt.compare(senha, usuario.senha))) {
-    return res.status(401).json({ mensagem: "Incorretos!" });
+    return res.status(401).json({ mensagem: "Email ou senha incorretos!" });
   }
 
   const token = jwt.sign({ id: usuario.id, nome: usuario.nome }, JWT_SECRET, { expiresIn: '1d' });
